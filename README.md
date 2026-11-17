@@ -1,6 +1,6 @@
 # Gerry Berry
 
-A single-player maze-chase game for the browser. Static files, vanilla JavaScript modules and a canvas. No build step, no runtime dependencies, nothing leaves your browser.
+A single-player maze-chase game for the browser, on desktop and on phones. Static files, vanilla JavaScript modules and a canvas. No build step, no runtime dependencies, nothing leaves your browser.
 
 ## Play in the browser
 
@@ -14,7 +14,7 @@ cd gerry-berry
 python3 -m http.server 8000 --bind 127.0.0.1
 ```
 
-Then open <http://127.0.0.1:8000/>. Press Enter on the title screen to start. The first key press also unlocks the sound.
+Then open <http://127.0.0.1:8000/>. Press Enter on the title screen to start (on a phone, tap; see Touch below). The first key press or touch also unlocks the sound.
 
 ## Controls
 
@@ -40,7 +40,9 @@ The whole screen is the touch area, so you can swipe anywhere, not only on the m
 
 After game over the game returns to the title screen, via the initials screen if you made the top ten.
 
-Tests: `node --test`
+## Tests
+
+`node --test`
 
 ## Highscores
 
