@@ -48,6 +48,24 @@ test("AC3: a short, still touch is a tap; a swipe, a long press or a drag is not
   assert.equal(swiped.up(50, 50, 1100), false);
 });
 
+test("boundaries: 23 px is not a swipe, 24 px is; 9 px is a tap, 10 px is not", () => {
+  assert.equal(swipe(createTouch(), 0, 0, 23, 0), null);
+  assert.equal(swipe(createTouch(), 0, 0, 24, 0), "ArrowRight");
+  assert.equal(swipe(createTouch(), 0, 0, 0, -23), null);
+  assert.equal(swipe(createTouch(), 0, 0, 0, -24), "ArrowUp");
+  const tap = (dx, dy, ms) => {
+    const t = createTouch();
+    t.down(0, 0, 0);
+    return t.up(dx, dy, ms);
+  };
+  assert.equal(tap(9, 0, 100), true);
+  assert.equal(tap(10, 0, 100), false);
+  assert.equal(tap(0, 9, 100), true);
+  assert.equal(tap(0, 10, 100), false);
+  assert.equal(tap(0, 0, 299), true);
+  assert.equal(tap(0, 0, 300), false);
+});
+
 test("a move or up without a touch down does nothing", () => {
   const t = createTouch();
   assert.equal(t.move(500, 500), null);
@@ -70,5 +88,8 @@ test("AC3/AC4/AC5: what a tap means depends on the screen", () => {
   assert.equal(tapKey("initials", 0.95), "Enter");
   assert.equal(tapKey("title", 0.5), "Enter");
   assert.equal(tapKey("title", 0.95), "m"); // the sound line, bottom of the canvas
+  assert.equal(tapKey("title", 0.88), "Enter"); // just above the sound band
+  assert.equal(tapKey("title", 0.89), "m");
+  assert.equal(tapKey("title", 1), "m");
   assert.equal(tapKey("title", 1.4), "Enter"); // below the canvas
 });

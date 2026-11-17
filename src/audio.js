@@ -131,7 +131,8 @@ export function createAudio(AudioContextCtor) {
     update(view, events) {
       const c = ctx;
       const out = master;
-      if (!c || !out) return;
+      // iOS "interrupted" (call, lock): scheduled sounds would all play at once on return.
+      if (!c || !out || c.state === "interrupted") return;
       try {
         for (const e of Array.isArray(events) ? events : []) {
           const type = e?.type;

@@ -47,9 +47,15 @@ function start(canvas) {
   let last = performance.now();
   audio.setMuted(app.snapshot().muted);
   /** One tick: app step, then feed that tick's events and the view after it to audio. */
+  let screen = "";
+  let screenSince = 0;
   const tick = (/** @type {string[]} */ keys) => {
     const events = app.step(keys);
     const view = app.snapshot();
+    if (view.screen !== screen) {
+      screen = view.screen;
+      screenSince = performance.now();
+    }
     audio.setMuted(view.muted);
     audio.update(view, events);
     return view;
@@ -87,7 +93,12 @@ function start(canvas) {
   document.addEventListener("pointerup", (e) => {
     if (!finger(e)) return;
     audio.unlock(); // iOS only unlocks audio at the end of a gesture
-    if (!touch.up(e.clientX, e.clientY, performance.now()) || document.hidden)
+    // Taps in the first 0.5 s of a screen are stray ones from the last (game over to initials).
+    if (
+      !touch.up(e.clientX, e.clientY, performance.now()) ||
+      document.hidden ||
+      performance.now() - screenSince < 500
+    )
       return;
     const rect = canvas.getBoundingClientRect();
     queue.push(
