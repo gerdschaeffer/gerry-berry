@@ -362,7 +362,13 @@ function paint(ctx, view) {
   if (view.screen === "title") {
     text(ctx, "MAZE MUNCHER", 112, 120);
     text(ctx, view.touch ? "TAP TO START" : "PRESS ENTER", 112, 164);
-    if (view.touch) text(ctx, "SWIPE TO MOVE", 112, 172);
+    text(ctx, "\u00a9 2026 GERD SCH\u00c4FFER", 112, 16);
+    text(ctx, "GITHUB.COM/GERDSCHAEFFER/MAZE-MUNCHER", 112, 28);
+    // The empty band above the title: how to play on this device.
+    (view.touch
+      ? ["SWIPE ANYWHERE TO MOVE", "TAP TO PAUSE", "TAP SOUND LINE TO MUTE"]
+      : ["ARROWS OR WASD TO MOVE", "P TO PAUSE", "M TO MUTE"]
+    ).forEach((line, i) => text(ctx, line, 112, 56 + 12 * i));
     rowsOf(view.scores).forEach((row, i) => text(ctx, row, 112, 184 + 8 * i));
     text(ctx, view.muted ? "SOUND OFF" : "SOUND ON", 112, 272);
     return;
