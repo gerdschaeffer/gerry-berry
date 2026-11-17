@@ -167,9 +167,9 @@ function bonus(ctx, name, x, y) {
   else disc(ctx, x, y, 4, TEXT);
 }
 
-/** @param {Ctx} ctx @param {string} s @param {number} x @param {number} y @param {CanvasTextAlign} align */
-function text(ctx, s, x, y, align = "center") {
-  ctx.font = "8px monospace";
+/** @param {Ctx} ctx @param {string} s @param {number} x @param {number} y @param {CanvasTextAlign} align @param {number} size */
+function text(ctx, s, x, y, align = "center", size = 8) {
+  ctx.font = `${size}px monospace`;
   ctx.textAlign = align;
   ctx.textBaseline = "middle";
   ctx.fillStyle = TEXT;
@@ -360,7 +360,7 @@ function paint(ctx, view) {
     if (!view.persistent) text(ctx, "SCORES NOT SAVED", 112, 264);
   }
   if (view.screen === "title") {
-    text(ctx, "GERRY BERRY", 112, 120);
+    text(ctx, "GERRY BERRY", 112, 120, "center", 24);
     text(ctx, view.touch ? "TAP TO START" : "PRESS ENTER", 112, 164);
     text(ctx, "\u00a9 2026 GERD SCH\u00c4FFER", 112, 16);
     text(ctx, "GITHUB.COM/GERDSCHAEFFER/GERRY-BERRY", 112, 28);
