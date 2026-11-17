@@ -4,13 +4,13 @@ A single-player maze-chase game for the browser. Static files, vanilla JavaScrip
 
 ## Play in the browser
 
-**Play online: <https://gerdschaeffer.github.io/maze-muncher/>**
+**Play online: <https://gerdschaeffer.github.io/gerry-berry/>**
 
 To run it locally instead, you need a current Chromium or Firefox and any way to serve the folder over HTTP. Opening `index.html` straight from disk usually fails, because the game uses ES modules.
 
 ```sh
-git clone https://github.com/gerdschaeffer/maze-muncher.git
-cd maze-muncher
+git clone https://github.com/gerdschaeffer/gerry-berry.git
+cd gerry-berry
 python3 -m http.server 8000 --bind 127.0.0.1
 ```
 

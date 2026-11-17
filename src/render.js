@@ -363,7 +363,7 @@ function paint(ctx, view) {
     text(ctx, "GERRY BERRY", 112, 120);
     text(ctx, view.touch ? "TAP TO START" : "PRESS ENTER", 112, 164);
     text(ctx, "\u00a9 2026 GERD SCH\u00c4FFER", 112, 16);
-    text(ctx, "GITHUB.COM/GERDSCHAEFFER/MAZE-MUNCHER", 112, 28);
+    text(ctx, "GITHUB.COM/GERDSCHAEFFER/GERRY-BERRY", 112, 28);
     // The empty band above the title: how to play on this device.
     (view.touch
       ? ["SWIPE ANYWHERE TO MOVE", "TAP TO PAUSE", "TAP SOUND LINE TO MUTE"]
