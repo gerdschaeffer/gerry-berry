@@ -1,4 +1,4 @@
-# Maze Muncher
+# Gerry Berry
 
 A single-player maze-chase game for the browser. Static files, vanilla JavaScript modules and a canvas. No build step, no runtime dependencies, nothing leaves your browser.
 
@@ -50,4 +50,4 @@ The best ten scores (three initials, A-Z and 0-9, and a score) and the mute sett
 
 Copyright (c) 2026 Gerd Schäffer. Released under the [MIT License](LICENSE).
 
-The game follows the rules and numbers of the classic arcade maze chase. The maze layout, graphics, sounds and title are original, and no arcade assets are used. Maze Muncher is not affiliated with or endorsed by Bandai Namco.
+The game follows the rules and numbers of the classic arcade maze chase. The maze layout, graphics, sounds and title are original, and no arcade assets are used. Gerry Berry is not affiliated with or endorsed by Bandai Namco.

@@ -360,7 +360,7 @@ function paint(ctx, view) {
     if (!view.persistent) text(ctx, "SCORES NOT SAVED", 112, 264);
   }
   if (view.screen === "title") {
-    text(ctx, "MAZE MUNCHER", 112, 120);
+    text(ctx, "GERRY BERRY", 112, 120);
     text(ctx, view.touch ? "TAP TO START" : "PRESS ENTER", 112, 164);
     text(ctx, "\u00a9 2026 GERD SCH\u00c4FFER", 112, 16);
     text(ctx, "GITHUB.COM/GERDSCHAEFFER/MAZE-MUNCHER", 112, 28);
