@@ -44,7 +44,7 @@ Tests: `node --test`
 
 ## Highscores
 
-The best ten scores (three initials, A-Z and 0-9, and a score) and the mute setting are stored in your browser's `localStorage` under `maze-muncher.scores` and `maze-muncher.muted`. Stored scores are checked on load, and entries that do not fit the format are dropped. If storage is unavailable, the screen shows SCORES NOT SAVED and scores last for the session only.
+The best ten scores (three initials, A-Z and 0-9, and a score) and the mute setting are stored in your browser's `localStorage` under `gerry-berry.scores` and `gerry-berry.muted`. Stored scores are checked on load, and entries that do not fit the format are dropped. If storage is unavailable, the screen shows SCORES NOT SAVED and scores last for the session only.
 
 ## License
 

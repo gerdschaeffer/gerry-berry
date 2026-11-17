@@ -3,8 +3,8 @@
 
 /** @typedef {{ initials: string, score: number }} Entry */
 
-export const SCORES_KEY = "maze-muncher.scores";
-export const MUTE_KEY = "maze-muncher.muted";
+export const SCORES_KEY = "gerry-berry.scores";
+export const MUTE_KEY = "gerry-berry.muted";
 
 const MAX_CHARS = 4096;
 const MAX_ENTRIES = 10;
