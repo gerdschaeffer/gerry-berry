@@ -6,9 +6,7 @@ A single-player maze-chase game for the browser. Static files, vanilla JavaScrip
 
 **Play online: <https://gerdschaeffer.github.io/maze-muncher/>**
 
-To run it locally instead:
-
-You need a current Chromium or Firefox, and any way to serve the folder over HTTP. Opening `index.html` straight from disk usually fails, because the game uses ES modules.
+To run it locally instead, you need a current Chromium or Firefox and any way to serve the folder over HTTP. Opening `index.html` straight from disk usually fails, because the game uses ES modules.
 
 ```sh
 git clone https://github.com/gerdschaeffer/maze-muncher.git
