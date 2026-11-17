@@ -95,7 +95,15 @@ export function createAudio(AudioContextCtor) {
 
   return {
     unlock() {
-      if (tried) return;
+      if (tried) {
+        // iOS suspends the context again after a lock or app switch; a later gesture revives it.
+        try {
+          if (ctx && ctx.state !== "running") ctx.resume().catch(() => {});
+        } catch {
+          // silent
+        }
+        return;
+      }
       tried = true;
       try {
         const c = new /** @type {typeof AudioContext} */ (AudioContextCtor)();

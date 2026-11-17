@@ -11,7 +11,7 @@ import { levelSpec } from "./engine/rules.js";
  *   popup: { x: number, y: number, points: number } | null }} Snap
  * @typedef {{ screen: string, muted: boolean, persistent: boolean, scores: unknown[],
  *   paused: boolean, high: number, game: Snap | null,
- *   initials: { chars: string[], slot: number } | null }} View
+ *   initials: { chars: string[], slot: number } | null, touch?: boolean }} View
  * @typedef {CanvasRenderingContext2D} Ctx
  */
 
@@ -361,13 +361,18 @@ function paint(ctx, view) {
   }
   if (view.screen === "title") {
     text(ctx, "MAZE MUNCHER", 112, 120);
-    text(ctx, "PRESS ENTER", 112, 164);
+    text(ctx, view.touch ? "TAP TO START" : "PRESS ENTER", 112, 164);
+    if (view.touch) text(ctx, "SWIPE TO MOVE", 112, 172);
     rowsOf(view.scores).forEach((row, i) => text(ctx, row, 112, 184 + 8 * i));
     text(ctx, view.muted ? "SOUND OFF" : "SOUND ON", 112, 272);
     return;
   }
   if (view.screen === "initials") {
     text(ctx, "ENTER YOUR INITIALS", 112, 120);
+    if (view.touch) {
+      text(ctx, "SWIPE TO PICK", 112, 190);
+      text(ctx, "TAP TO CONFIRM", 112, 198);
+    }
     const ini = view.initials;
     if (!ini) return;
     const chars = ini.chars ?? [];

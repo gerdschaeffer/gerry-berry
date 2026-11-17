@@ -3,6 +3,7 @@
 import { createApp, keyToDir } from "./app.js";
 import { createRenderer } from "./render.js";
 import { createAudio } from "./audio.js";
+import { createTouch, tapKey } from "./touch.js";
 
 export { keyToDir, keysToInput } from "./app.js";
 
@@ -70,6 +71,34 @@ function start(canvas) {
     queue.push(e.key);
   });
 
+  const touch = createTouch();
+  const coarse = globalThis.matchMedia?.("(pointer: coarse)").matches ?? false;
+  // A mouse click on desktop must not pause the game.
+  const finger = (/** @type {PointerEvent} */ e) =>
+    e.isPrimary && e.pointerType !== "mouse";
+  document.addEventListener("pointerdown", (e) => {
+    if (finger(e)) touch.down(e.clientX, e.clientY, performance.now());
+  });
+  document.addEventListener("pointermove", (e) => {
+    if (!finger(e)) return;
+    const key = touch.move(e.clientX, e.clientY);
+    if (key && !document.hidden) queue.push(key);
+  });
+  document.addEventListener("pointerup", (e) => {
+    if (!finger(e)) return;
+    audio.unlock(); // iOS only unlocks audio at the end of a gesture
+    if (!touch.up(e.clientX, e.clientY, performance.now()) || document.hidden)
+      return;
+    const rect = canvas.getBoundingClientRect();
+    queue.push(
+      tapKey(app.snapshot().screen, (e.clientY - rect.top) / rect.height),
+    );
+  });
+  // Infinity: a cancelled touch is never a tap
+  document.addEventListener("pointercancel", (e) => {
+    if (finger(e)) touch.up(e.clientX, e.clientY, Infinity);
+  });
+
   document.addEventListener("visibilitychange", () => {
     if (!document.hidden) {
       last = performance.now();
@@ -88,7 +117,7 @@ function start(canvas) {
     last = now;
     let view = null;
     for (let i = 0; i < due.ticks; i++) view = tick(queue.splice(0, 16));
-    renderer.draw(view ?? app.snapshot());
+    renderer.draw({ ...(view ?? app.snapshot()), touch: coarse });
     requestAnimationFrame(frame);
   };
   requestAnimationFrame(frame);
