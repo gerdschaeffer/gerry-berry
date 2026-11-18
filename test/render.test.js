@@ -8,7 +8,7 @@ const TEN = Array.from({ length: 10 }, (_, i) => ({
 }));
 
 /** Draws a title view on a fake canvas; returns every fillText [s, style, y] and fillRect [w, h, style, x, y]. */
-function drawTitle({ touch, persistent = true, scores = [] } = {}) {
+function drawTitle({ touch, persistent = true, scores = [], qr = false } = {}) {
   const texts = [];
   const rects = [];
   const ctx = new Proxy(
@@ -36,6 +36,7 @@ function drawTitle({ touch, persistent = true, scores = [] } = {}) {
     game: null,
     initials: null,
     touch,
+    qr,
   });
   const at = (s) => texts.find((t) => t[0] === s);
   return { texts, rects, at, fills: new Map(texts.map((t) => [t[0], t[1]])) };
@@ -94,4 +95,26 @@ test("on a touch device the title layout is unchanged", () => {
   assert.equal(at("TAP TO START")[2], 164);
   assert.equal(at("SCORES NOT SAVED")[2], 264);
   assert.equal(at("SOUND ON")[2], 272);
+});
+
+const POPUP_PLATE = (r) => r[0] === 140 && r[1] === 140 && r[2] === "#FFFFFF";
+
+test("AC4: on a touch device the title shows the QR line and no QR code", () => {
+  const { fills, rects } = drawTitle({ touch: true });
+  assert.equal(fills.get("TAP HERE FOR QR CODE"), "#E8E6F0");
+  assert.equal(rects.filter(QR_PLATE).length, 0);
+  assert.equal(rects.filter(POPUP_PLATE).length, 0);
+  assert.equal(drawTitle({ touch: false }).fills.has("TAP HERE FOR QR CODE"), false);
+});
+
+test("AC5: with the popup open a large, centred QR code is drawn with a close hint", () => {
+  const { rects, fills, at } = drawTitle({ touch: true, qr: true });
+  const plate = rects.find(POPUP_PLATE);
+  assert.ok(plate, "140 px plate");
+  assert.equal(plate[3] * 2 + 140, 224); // centred
+  assert.ok(plate[4] >= 0 && plate[4] + 140 <= 288);
+  assert.ok(rects.some((r) => r[0] === 4 && r[1] === 4 && r[2] === "#07060D"));
+  assert.equal(fills.get("TAP TO CLOSE"), "#E8E6F0");
+  assert.equal(at("SCAN TO PLAY")[2] + 4 <= plate[4], true);
+  assert.equal(at("TAP TO CLOSE")[2] - 4 >= plate[4] + 140, true);
 });

@@ -12,7 +12,7 @@ import { QR } from "./qr.js";
  *   popup: { x: number, y: number, points: number } | null }} Snap
  * @typedef {{ screen: string, muted: boolean, persistent: boolean, scores: unknown[],
  *   paused: boolean, high: number, game: Snap | null,
- *   initials: { chars: string[], slot: number } | null, touch?: boolean }} View
+ *   initials: { chars: string[], slot: number } | null, touch?: boolean, qr?: boolean }} View
  * @typedef {CanvasRenderingContext2D} Ctx
  */
 
@@ -178,14 +178,15 @@ function text(ctx, s, x, y, align = "center", size = 8, color = TEXT) {
   ctx.fillText(s, x, y);
 }
 
-/** The QR code, 2 px per module on a white plate with a 3-module quiet zone, centred. @param {Ctx} ctx @param {number} y */
-function drawQr(ctx, y) {
-  const size = QR.length * 2 + 12;
+/** The QR code, m px per module on a white plate with a 3-module quiet zone, centred. @param {Ctx} ctx @param {number} y @param {number} m */
+function drawQr(ctx, y, m = 2) {
+  const size = (QR.length + 6) * m;
   const x = (W - size) / 2;
   box(ctx, x, y, size, size, FLASH);
   QR.forEach((row, ty) => {
     for (let tx = 0; tx < row.length; tx++)
-      if (row[tx] === "#") box(ctx, x + 6 + tx * 2, y + 6 + ty * 2, 2, 2, BG);
+      if (row[tx] === "#")
+        box(ctx, x + 3 * m + tx * m, y + 3 * m + ty * m, m, m, BG);
   });
 }
 
@@ -393,6 +394,7 @@ function paint(ctx, view) {
       ? ["SWIPE ANYWHERE TO MOVE", "TAP TO PAUSE", "TAP SOUND LINE TO MUTE"]
       : ["ARROWS OR WASD TO MOVE", "P TO PAUSE", "M TO MUTE"]
     ).forEach((line, i) => text(ctx, line, 112, L.how + L.step * i));
+    if (view.touch) text(ctx, "TAP HERE FOR QR CODE", 112, 44);
     rowsOf(view.scores).forEach((row, i) =>
       text(ctx, row, 112, L.scores + 8 * i),
     );
@@ -401,6 +403,13 @@ function paint(ctx, view) {
     if (!view.touch) {
       text(ctx, "SCAN TO PLAY", 112, 186);
       drawQr(ctx, 194);
+    }
+    if (view.qr) {
+      // The popup: a bigger code to scan from another phone; it covers everything drawn so far.
+      box(ctx, 0, 0, W, H, BG);
+      text(ctx, "SCAN TO PLAY", 112, 58);
+      drawQr(ctx, 74, 4);
+      text(ctx, view.touch ? "TAP TO CLOSE" : "PRESS ANY KEY", 112, 232);
     }
     return;
   }

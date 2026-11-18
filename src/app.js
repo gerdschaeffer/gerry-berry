@@ -71,6 +71,7 @@ export function createApp(opts) {
     // no storage or a failing read: not muted
   }
   let screen = "title";
+  let qr = false; // the QR popup on the title screen
   /** @type {ReturnType<typeof createGame> | null} */
   let game = null;
   let score = 0; // the score being entered on the initials screen
@@ -92,7 +93,12 @@ export function createApp(opts) {
     /** @type {Event[]} */
     const ev = [];
     for (const k of keys) {
-      if (k === "m" || k === "M") ev.push(toggleMute());
+      if (qr) {
+        qr = false; // any key closes the popup and does nothing else, nor do the rest of this tick's keys
+        break;
+      }
+      if (k === "q" || k === "Q") qr = true;
+      else if (k === "m" || k === "M") ev.push(toggleMute());
       else if (k === "Enter") {
         game = createGame(seed, gameOptions);
         screen = "game";
@@ -175,6 +181,7 @@ export function createApp(opts) {
       return {
         screen,
         muted,
+        qr,
         persistent,
         scores: scores.map((x) => ({ initials: x.initials, score: x.score })),
         high: Math.max(

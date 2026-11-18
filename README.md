@@ -14,7 +14,7 @@ cd gerry-berry
 python3 -m http.server 8000 --bind 127.0.0.1
 ```
 
-Then open <http://127.0.0.1:8000/>. Press Enter on the title screen to start (on a phone, tap; see Touch below). The first key press or touch also unlocks the sound.
+Then open <http://127.0.0.1:8000/>. On a desktop the title screen shows a QR code, so you can open the game on your phone by scanning it. Press Enter on the title screen to start (on a phone, tap; see Touch below). The first key press or touch also unlocks the sound.
 
 ## Controls
 
@@ -23,6 +23,7 @@ Then open <http://127.0.0.1:8000/>. Press Enter on the title screen to start (on
 | Arrow keys or WASD | move |
 | P | pause or resume (the game also pauses when the tab is hidden and stays paused until you press P) |
 | M | mute on the title and game screens (remembered) |
+| Q | show a bigger QR code on the title screen (any key closes it) |
 | Enter | start a game, confirm initials |
 | Letters, digits, Up/Down, Left/Right, Backspace | enter your initials after a highscore |
 
@@ -37,6 +38,7 @@ The whole screen is the touch area, so you can swipe anywhere, not only on the m
 | swipe up/down on the initials screen | change the letter |
 | swipe left/right on the initials screen | move to the next or previous slot |
 | tap the SOUND line on the title screen | mute |
+| tap the TAP HERE FOR QR CODE line on the title screen | show a QR code that opens the game (tap anywhere to close) |
 
 After game over the game returns to the title screen, via the initials screen if you made the top ten.
 
