@@ -178,9 +178,11 @@ function text(ctx, s, x, y, align = "center", size = 8, color = TEXT) {
   ctx.fillText(s, x, y);
 }
 
-/** The QR code, 2 px per module on a white plate with a 3-module quiet zone. @param {Ctx} ctx @param {number} x @param {number} y */
-function drawQr(ctx, x, y) {
-  box(ctx, x, y, QR.length * 2 + 12, QR.length * 2 + 12, FLASH);
+/** The QR code, 2 px per module on a white plate with a 3-module quiet zone, centred. @param {Ctx} ctx @param {number} y */
+function drawQr(ctx, y) {
+  const size = QR.length * 2 + 12;
+  const x = (W - size) / 2;
+  box(ctx, x, y, size, size, FLASH);
   QR.forEach((row, ty) => {
     for (let tx = 0; tx < row.length; tx++)
       if (row[tx] === "#") box(ctx, x + 6 + tx * 2, y + 6 + ty * 2, 2, 2, BG);
@@ -368,24 +370,37 @@ function rowsOf(scores) {
 function paint(ctx, view) {
   const g = view.game;
   if (view.screen === "title" || view.screen === "initials") {
-    if (!view.persistent) text(ctx, "SCORES NOT SAVED", 112, 264);
+    // Desktop also has the QR code under the scores (below), so its notice moves under SOUND.
+    if (!view.persistent)
+      text(
+        ctx,
+        "SCORES NOT SAVED",
+        112,
+        view.screen === "title" && !view.touch ? 281 : 264,
+      );
   }
   if (view.screen === "title") {
-    text(ctx, "GERRY BERRY", 112, 120, "center", 24, TITLE);
-    text(ctx, view.touch ? "TAP TO START" : "PRESS ENTER", 112, 164);
-    text(ctx, "\u00a9 2026 GERD SCH\u00c4FFER", 112, 16);
-    text(ctx, "GITHUB.COM/GERDSCHAEFFER/GERRY-BERRY", 112, 28);
+    // Desktop packs everything above the scores tighter to leave room for the QR code.
+    const L = view.touch
+      ? { copy: 16, url: 28, how: 56, step: 12, title: 120, go: 164, scores: 184 }
+      : { copy: 8, url: 18, how: 30, step: 10, title: 68, go: 90, scores: 102 };
+    text(ctx, "GERRY BERRY", 112, L.title, "center", 24, TITLE);
+    text(ctx, view.touch ? "TAP TO START" : "PRESS ENTER", 112, L.go);
+    text(ctx, "\u00a9 2026 GERD SCH\u00c4FFER", 112, L.copy);
+    text(ctx, "GITHUB.COM/GERDSCHAEFFER/GERRY-BERRY", 112, L.url);
     // The empty band above the title: how to play on this device.
     (view.touch
       ? ["SWIPE ANYWHERE TO MOVE", "TAP TO PAUSE", "TAP SOUND LINE TO MUTE"]
       : ["ARROWS OR WASD TO MOVE", "P TO PAUSE", "M TO MUTE"]
-    ).forEach((line, i) => text(ctx, line, 112, 56 + 12 * i));
-    rowsOf(view.scores).forEach((row, i) => text(ctx, row, 112, 184 + 8 * i));
+    ).forEach((line, i) => text(ctx, line, 112, L.how + L.step * i));
+    rowsOf(view.scores).forEach((row, i) =>
+      text(ctx, row, 112, L.scores + 8 * i),
+    );
     text(ctx, view.muted ? "SOUND OFF" : "SOUND ON", 112, 272);
-    // Right of the score list: a phone camera opens the game. Pointless on a phone itself.
+    // Under the score list: a phone camera opens the game. Pointless on a phone itself.
     if (!view.touch) {
-      text(ctx, "SCAN TO PLAY", 185, 178);
-      drawQr(ctx, 150, 186);
+      text(ctx, "SCAN TO PLAY", 112, 186);
+      drawQr(ctx, 194);
     }
     return;
   }
