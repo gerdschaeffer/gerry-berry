@@ -93,3 +93,13 @@ test("AC3/AC4/AC5: what a tap means depends on the screen", () => {
   assert.equal(tapKey("title", 1), "m");
   assert.equal(tapKey("title", 1.4), "Enter"); // below the canvas
 });
+
+test("AC3: a tap on the QR line of the title screen is Q; elsewhere it means what it did", () => {
+  assert.equal(tapKey("title", 0.12), "q");
+  assert.equal(tapKey("title", 0.15), "q");
+  assert.equal(tapKey("title", 0.185), "q");
+  assert.equal(tapKey("title", 0.11), "Enter");
+  assert.equal(tapKey("title", 0.19), "Enter");
+  assert.equal(tapKey("game", 0.15), "p");
+  assert.equal(tapKey("initials", 0.15), "Enter");
+});

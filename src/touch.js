@@ -40,6 +40,8 @@ export function createTouch() {
  */
 export function tapKey(screen, yFrac) {
   if (screen === "game") return "p";
+  // the TAP HERE FOR QR CODE line sits at y 44 of 288
+  if (screen === "title" && yFrac >= 0.12 && yFrac < 0.19) return "q";
   // the SOUND ON/OFF line sits at y 272 of 288
   if (screen === "title" && yFrac >= 0.89 && yFrac <= 1) return "m";
   return "Enter";
