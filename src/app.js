@@ -1,13 +1,13 @@
 // App state machine (spec 001 §8.10, pinned M8b conventions): title, game and initials screens,
 // mute and the highscore table. No DOM; storage is injected and any call to it may throw.
-import { createGame } from "./engine/game.js";
+import { createGame } from "./engine/game.js?v=1";
 import {
   MUTE_KEY,
   loadScores,
   saveScores,
   qualifies,
   insertScore,
-} from "./scores.js";
+} from "./scores.js?v=1";
 
 const DIR_KEYS = new Map([
   ["ArrowUp", "up"],

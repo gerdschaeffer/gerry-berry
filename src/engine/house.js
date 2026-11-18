@@ -1,6 +1,6 @@
 // Ghost house release counters (spec 001 §5.4, §8.5). Pure: new objects, arguments never mutated.
 
-import { levelSpec } from "./rules.js";
+import { levelSpec } from "./rules.js?v=1";
 
 const WAITERS = ["ambusher", "flanker", "wanderer"];
 /** @type {Record<string, number>} */

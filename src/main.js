@@ -1,11 +1,11 @@
 // DOM glue only (spec 001 §4.1, §4.3, §8.6): keyboard, rAF loop, resize, visibility.
 // No DOM code runs at import when there is no document, so Node tests can import the helpers.
-import { createApp, keyToDir } from "./app.js";
-import { createRenderer } from "./render.js";
-import { createAudio } from "./audio.js";
-import { createTouch, tapKey } from "./touch.js";
+import { createApp, keyToDir } from "./app.js?v=1";
+import { createRenderer } from "./render.js?v=1";
+import { createAudio } from "./audio.js?v=1";
+import { createTouch, tapKey } from "./touch.js?v=1";
 
-export { keyToDir, keysToInput } from "./app.js";
+export { keyToDir, keysToInput } from "./app.js?v=1";
 
 const NO_SCROLL = new Set([
   "ArrowUp",
