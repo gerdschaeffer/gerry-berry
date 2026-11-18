@@ -26,7 +26,6 @@ const FLASH = "#FFFFFF";
 const GREEN = "#3DDC97";
 const DARK = "#0B1020";
 const TEXT = "#E8E6F0";
-const TITLE = "#FFC93C";
 /** @type {Record<string, [number, number]>} */
 const DIRV = { up: [0, -1], left: [-1, 0], down: [0, 1], right: [1, 0] };
 /** @type {Record<string, string>} */
@@ -169,13 +168,25 @@ function bonus(ctx, name, x, y) {
   else disc(ctx, x, y, 4, TEXT);
 }
 
-/** @param {Ctx} ctx @param {string} s @param {number} x @param {number} y @param {CanvasTextAlign} align @param {number} size @param {string} color */
-function text(ctx, s, x, y, align = "center", size = 8, color = TEXT) {
-  ctx.font = `${size}px monospace`;
+/** @param {Ctx} ctx @param {string} s @param {number} x @param {number} y @param {CanvasTextAlign} align @param {number} size @param {string} color @param {boolean} bold */
+function text(ctx, s, x, y, align = "center", size = 8, color = TEXT, bold = false) {
+  ctx.font = `${bold ? "bold " : ""}${size}px monospace`;
   ctx.textAlign = align;
   ctx.textBaseline = "middle";
   ctx.fillStyle = color;
   ctx.fillText(s, x, y);
+}
+
+/** The title, one rainbow colour per letter. @param {Ctx} ctx @param {number} y */
+function drawTitleText(ctx, y) {
+  const name = "GERRY BERRY";
+  const cw = 14.4; // shortcut: monospace is 0.6 em wide at 24 px; a font that differs only spaces the letters unevenly
+  let n = 0;
+  [...name].forEach((ch, i) => {
+    if (ch === " ") return;
+    const x = 112 + (i - (name.length - 1) / 2) * cw;
+    text(ctx, ch, x, y, "center", 24, `hsl(${36 * n++}, 100%, 60%)`);
+  });
 }
 
 /** The QR code, m px per module on a white plate with a 3-module quiet zone, centred. @param {Ctx} ctx @param {number} y @param {number} m */
@@ -385,7 +396,7 @@ function paint(ctx, view) {
     const L = view.touch
       ? { copy: 16, url: 28, how: 56, step: 12, title: 120, go: 164, scores: 184 }
       : { copy: 8, url: 18, how: 30, step: 10, title: 68, go: 90, scores: 102 };
-    text(ctx, "GERRY BERRY", 112, L.title, "center", 24, TITLE);
+    drawTitleText(ctx, L.title);
     text(ctx, view.touch ? "TAP TO START" : "PRESS ENTER", 112, L.go);
     text(ctx, "\u00a9 2026 GERD SCH\u00c4FFER", 112, L.copy);
     text(ctx, "GITHUB.COM/GERDSCHAEFFER/GERRY-BERRY", 112, L.url);
@@ -394,7 +405,8 @@ function paint(ctx, view) {
       ? ["SWIPE ANYWHERE TO MOVE", "TAP TO PAUSE", "TAP SOUND LINE TO MUTE"]
       : ["ARROWS OR WASD TO MOVE", "P TO PAUSE", "M TO MUTE"]
     ).forEach((line, i) => text(ctx, line, 112, L.how + L.step * i));
-    if (view.touch) text(ctx, "TAP HERE FOR QR CODE", 112, 44);
+    if (view.touch)
+      text(ctx, "INVITE OTHERS: TAP HERE FOR QR CODE", 112, 44, "center", 8, GREEN, true);
     rowsOf(view.scores).forEach((row, i) =>
       text(ctx, row, 112, L.scores + 8 * i),
     );

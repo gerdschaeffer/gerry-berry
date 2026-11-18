@@ -7,7 +7,7 @@ const TEN = Array.from({ length: 10 }, (_, i) => ({
   score: 9999999 - i,
 }));
 
-/** Draws a title view on a fake canvas; returns every fillText [s, style, y] and fillRect [w, h, style, x, y]. */
+/** Draws a title view on a fake canvas; returns every fillText [s, style, y, x, font] and fillRect [w, h, style, x, y]. */
 function drawTitle({ touch, persistent = true, scores = [], qr = false } = {}) {
   const texts = [];
   const rects = [];
@@ -16,7 +16,7 @@ function drawTitle({ touch, persistent = true, scores = [], qr = false } = {}) {
     {
       get: (t, k) =>
         k === "fillText"
-          ? (s, x, y) => texts.push([s, t.fillStyle, y])
+          ? (s, x, y) => texts.push([s, t.fillStyle, y, x, t.font])
           : k === "fillRect"
             ? (x, y, w, h) => rects.push([w, h, t.fillStyle, x, y])
             : k in t
@@ -42,8 +42,19 @@ function drawTitle({ touch, persistent = true, scores = [], qr = false } = {}) {
   return { texts, rects, at, fills: new Map(texts.map((t) => [t[0], t[1]])) };
 }
 
-test("AC1: the title is drawn in its own colour", () => {
-  assert.equal(drawTitle().fills.get("GERRY BERRY"), "#FFC93C");
+const letters = (d, y) => d.texts.filter((t) => t[0].length === 1 && t[2] === y);
+
+test("AC1: the title is drawn letter by letter in a rainbow, centred", () => {
+  const d = drawTitle();
+  const l = letters(d, 68);
+  assert.equal(l.map((t) => t[0]).join(""), "GERRYBERRY");
+  assert.equal(new Set(l.map((t) => t[1])).size >= 8, true, "at least 8 distinct colours");
+  assert.equal(l.some((t) => t[1] === "#E8E6F0"), false, "none in the plain text colour");
+  assert.ok(l.every((t) => t[4].startsWith("24px")), "still 24 px");
+  // the span of the letters is centred on 112 and the gap between words is kept
+  assert.ok(Math.abs((l[0][3] + l[l.length - 1][3]) / 2 - 112) < 0.01);
+  const xs = l.map((t) => t[3]);
+  assert.ok(xs[5] - xs[4] > xs[4] - xs[3], "the space leaves a wider gap");
 });
 
 test("AC2: the other title-screen lines keep the normal text colour", () => {
@@ -91,7 +102,7 @@ test("the SCORES NOT SAVED notice stays clear of the QR code", () => {
 
 test("on a touch device the title layout is unchanged", () => {
   const { at } = drawTitle({ touch: true, persistent: false });
-  assert.equal(at("GERRY BERRY")[2], 120);
+  assert.equal(letters(drawTitle({ touch: true }), 120).length, 10);
   assert.equal(at("TAP TO START")[2], 164);
   assert.equal(at("SCORES NOT SAVED")[2], 264);
   assert.equal(at("SOUND ON")[2], 272);
@@ -100,11 +111,14 @@ test("on a touch device the title layout is unchanged", () => {
 const POPUP_PLATE = (r) => r[0] === 140 && r[1] === 140 && r[2] === "#FFFFFF";
 
 test("AC4: on a touch device the title shows the QR line and no QR code", () => {
-  const { fills, rects } = drawTitle({ touch: true });
-  assert.equal(fills.get("TAP HERE FOR QR CODE"), "#E8E6F0");
+  const { rects, at } = drawTitle({ touch: true });
+  const line = at("INVITE OTHERS: TAP HERE FOR QR CODE");
+  assert.equal(line[1], "#3DDC97", "coloured");
+  assert.ok(line[4].startsWith("bold "), "bold");
+  assert.equal(line[2], 44);
   assert.equal(rects.filter(QR_PLATE).length, 0);
   assert.equal(rects.filter(POPUP_PLATE).length, 0);
-  assert.equal(drawTitle({ touch: false }).fills.has("TAP HERE FOR QR CODE"), false);
+  assert.equal(drawTitle({ touch: false }).fills.has("INVITE OTHERS: TAP HERE FOR QR CODE"), false);
 });
 
 test("AC5: with the popup open a large, centred QR code is drawn with a close hint", () => {

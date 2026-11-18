@@ -38,7 +38,7 @@ The whole screen is the touch area, so you can swipe anywhere, not only on the m
 | swipe up/down on the initials screen | change the letter |
 | swipe left/right on the initials screen | move to the next or previous slot |
 | tap the SOUND line on the title screen | mute |
-| tap the TAP HERE FOR QR CODE line on the title screen | show a QR code that opens the game (tap anywhere to close) |
+| tap the INVITE OTHERS line on the title screen | show a QR code that opens the game (tap anywhere to close) |
 
 After game over the game returns to the title screen, via the initials screen if you made the top ten.
 
