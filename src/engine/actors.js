@@ -1,6 +1,6 @@
 // Player movement (spec 001 §8.3) and ghost decisions (§8.4): targets, chooseDir, frightDir.
 
-import { isPath } from "./maze-tools.js";
+import { isPath } from "./maze-tools.js?v=1";
 
 /** @type {Record<string, [number, number]>} */
 export const DIRS = {

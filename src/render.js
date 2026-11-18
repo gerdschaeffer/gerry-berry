@@ -1,6 +1,6 @@
 // Canvas renderer (spec 001 §8.7, §8.8). Reads views only; every sprite is drawn in code.
-import { levelSpec } from "./engine/rules.js";
-import { QR } from "./qr.js";
+import { levelSpec } from "./engine/rules.js?v=1";
+import { QR } from "./qr.js?v=1";
 
 /**
  * @typedef {{ role: string, x: number, y: number, dir: string, state: string,

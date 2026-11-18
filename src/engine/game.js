@@ -2,14 +2,14 @@
 // gameOver), player movement and eating, four ghosts, the scatter/chase schedule, forced
 // reversals, ghost speeds, the ghost house, Elroy, fright, eaten ghosts, fruit, lives and pause.
 
-import shippedMaze from "../maze.js";
+import shippedMaze from "../maze.js?v=1";
 import {
   EXTRA_LIFE_SCORE,
   EYES_PCT,
   advance,
   levelSpec,
   mulberry32,
-} from "./rules.js";
+} from "./rules.js?v=1";
 import {
   DIRS,
   REVERSE,
@@ -17,8 +17,8 @@ import {
   frightDir,
   playerStep,
   targetTile,
-} from "./actors.js";
-import { newHouse, releaseStep, restartHouse } from "./house.js";
+} from "./actors.js?v=1";
+import { newHouse, releaseStep, restartHouse } from "./house.js?v=1";
 
 const MAX_SCORE = 9999999;
 const ROLES = ["chaser", "ambusher", "flanker", "wanderer"];
