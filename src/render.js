@@ -1,5 +1,6 @@
 // Canvas renderer (spec 001 §8.7, §8.8). Reads views only; every sprite is drawn in code.
 import { levelSpec } from "./engine/rules.js";
+import { QR } from "./qr.js";
 
 /**
  * @typedef {{ role: string, x: number, y: number, dir: string, state: string,
@@ -175,6 +176,15 @@ function text(ctx, s, x, y, align = "center", size = 8, color = TEXT) {
   ctx.textBaseline = "middle";
   ctx.fillStyle = color;
   ctx.fillText(s, x, y);
+}
+
+/** The QR code, 2 px per module on a white plate with a 3-module quiet zone. @param {Ctx} ctx @param {number} x @param {number} y */
+function drawQr(ctx, x, y) {
+  box(ctx, x, y, QR.length * 2 + 12, QR.length * 2 + 12, FLASH);
+  QR.forEach((row, ty) => {
+    for (let tx = 0; tx < row.length; tx++)
+      if (row[tx] === "#") box(ctx, x + 6 + tx * 2, y + 6 + ty * 2, 2, 2, BG);
+  });
 }
 
 /** @param {Ctx} ctx @param {Snap} g */
@@ -372,6 +382,11 @@ function paint(ctx, view) {
     ).forEach((line, i) => text(ctx, line, 112, 56 + 12 * i));
     rowsOf(view.scores).forEach((row, i) => text(ctx, row, 112, 184 + 8 * i));
     text(ctx, view.muted ? "SOUND OFF" : "SOUND ON", 112, 272);
+    // Right of the score list: a phone camera opens the game. Pointless on a phone itself.
+    if (!view.touch) {
+      text(ctx, "SCAN TO PLAY", 185, 178);
+      drawQr(ctx, 150, 186);
+    }
     return;
   }
   if (view.screen === "initials") {
